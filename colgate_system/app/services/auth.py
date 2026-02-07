@@ -14,8 +14,12 @@ from app.database import get_db
 from app.models.usuario import Usuario, RolUsuario
 from app.schemas.usuario import TokenData
 
-# Configuración de password hashing
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Configuración de password hashing - compatible con nuevas versiones de bcrypt
+pwd_context = CryptContext(
+    schemes=["bcrypt"],
+    deprecated="auto",
+    bcrypt__rounds=12
+)
 
 # OAuth2 scheme
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")

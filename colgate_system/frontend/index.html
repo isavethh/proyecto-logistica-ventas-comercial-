@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión - Colgate</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --colgate-red: #e21937;
+            --colgate-dark: #c41230;
+        }
+        
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: linear-gradient(180deg, var(--colgate-red) 0%, var(--colgate-dark) 100%);
+            padding-top: 20px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar .logo {
+            text-align: center;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            margin-bottom: 20px;
+        }
+        
+        .sidebar .logo h3 {
+            color: white;
+            font-weight: bold;
+            margin: 0;
+        }
+        
+        .sidebar .logo small {
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.8);
+            padding: 12px 25px;
+            margin: 2px 10px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+        
+        .sidebar .nav-link i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+        }
+        
+        .top-bar {
+            background: white;
+            padding: 15px 25px;
+            margin: -20px -20px 20px -20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+        
+        .card-header {
+            background: white;
+            border-bottom: 1px solid #eee;
+            font-weight: 600;
+        }
+        
+        .stat-card {
+            border-radius: 12px;
+            padding: 20px;
+            color: white;
+        }
+        
+        .stat-card.bg-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important; }
+        .stat-card.bg-success { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important; }
+        .stat-card.bg-warning { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%) !important; }
+        .stat-card.bg-info { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%) !important; }
+        
+        .stat-card .stat-icon {
+            font-size: 2.5rem;
+            opacity: 0.3;
+            position: absolute;
+            right: 20px;
+            top: 20px;
+        }
+        
+        .stat-card .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .btn-colgate {
+            background: var(--colgate-red);
+            border-color: var(--colgate-red);
+            color: white;
+        }
+        
+        .btn-colgate:hover {
+            background: var(--colgate-dark);
+            border-color: var(--colgate-dark);
+            color: white;
+        }
+        
+        .table-hover tbody tr:hover {
+            background-color: rgba(226, 25, 55, 0.05);
+        }
+        
+        .badge-estado {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        
+        #loginPage {
+            background: linear-gradient(135deg, var(--colgate-red) 0%, var(--colgate-dark) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            width: 400px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .section {
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Página de Login -->
+    <div id="loginPage">
+        <div class="login-card">
+            <div class="text-center mb-4">
+                <h2 class="text-danger fw-bold">COLGATE</h2>
+                <p class="text-muted">Sistema de Gestión Empresarial</p>
+            </div>
+            <form id="loginForm">
+                <div class="mb-3">
+                    <label class="form-label">Usuario</label>
+                    <input type="text" class="form-control form-control-lg" id="username" placeholder="Ingrese su usuario" required>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Contraseña</label>
+                    <input type="password" class="form-control form-control-lg" id="password" placeholder="Ingrese su contraseña" required>
+                </div>
+                <button type="submit" class="btn btn-colgate btn-lg w-100">
+                    <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                </button>
+            </form>
+            <div class="text-center mt-4">
+                <small class="text-muted">
+                    Usuario demo: <code>admin</code> / <code>admin123</code>
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Principal -->
+    <div id="dashboardPage" style="display: none;">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="logo">
+                <h3>COLGATE</h3>
+                <small>Sistema de Gestión</small>
+            </div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" data-section="dashboard">
+                        <i class="bi bi-speedometer2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-section="productos">
+                        <i class="bi bi-box-seam"></i> Productos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-section="clientes">
+                        <i class="bi bi-people"></i> Clientes
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-section="inventario">
+                        <i class="bi bi-clipboard-data"></i> Inventario
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-section="ventas">
+                        <i class="bi bi-cart3"></i> Ventas
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-section="logistica">
+                        <i class="bi bi-truck"></i> Logística
+                    </a>
+                </li>
+                <li class="nav-item mt-4">
+                    <a class="nav-link" href="#" id="btnLogout">
+                        <i class="bi bi-box-arrow-left"></i> Cerrar Sesión
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Contenido Principal -->
+        <div class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div>
+                    <h4 id="pageTitle" class="mb-0">Dashboard</h4>
+                </div>
+                <div class="d-flex align-items-center">
+                    <span class="me-3" id="userInfo">
+                        <i class="bi bi-person-circle"></i> <span id="userName">Usuario</span>
+                    </span>
+                    <span class="badge bg-success" id="userRole">Admin</span>
+                </div>
+            </div>
+
+            <!-- Sección Dashboard -->
+            <div id="section-dashboard" class="section active">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="stat-card bg-primary position-relative">
+                            <i class="bi bi-box-seam stat-icon"></i>
+                            <p class="mb-1">Productos</p>
+                            <div class="stat-value" id="totalProductos">0</div>
+                            <small>Total en catálogo</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card bg-success position-relative">
+                            <i class="bi bi-people stat-icon"></i>
+                            <p class="mb-1">Clientes</p>
+                            <div class="stat-value" id="totalClientes">0</div>
+                            <small>Clientes activos</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card bg-warning position-relative">
+                            <i class="bi bi-cart-check stat-icon"></i>
+                            <p class="mb-1">Ventas Hoy</p>
+                            <div class="stat-value" id="ventasHoy">0</div>
+                            <small>Pedidos del día</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card bg-info position-relative">
+                            <i class="bi bi-truck stat-icon"></i>
+                            <p class="mb-1">Envíos</p>
+                            <div class="stat-value" id="enviosPendientes">0</div>
+                            <small>Pendientes de entrega</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-cart3"></i> Últimas Ventas</span>
+                                <button class="btn btn-sm btn-colgate" onclick="showSection('ventas')">Ver todas</button>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Número</th>
+                                            <th>Cliente</th>
+                                            <th>Total</th>
+                                            <th>Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ultimasVentas">
+                                        <tr>
+                                            <td colspan="4" class="text-center text-muted">Cargando...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="bi bi-exclamation-triangle"></i> Stock Bajo
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush" id="stockBajo">
+                                    <li class="list-group-item text-center text-muted">Cargando...</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección Productos -->
+            <div id="section-productos" class="section">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-box-seam"></i> Catálogo de Productos</span>
+                        <button class="btn btn-colgate" data-bs-toggle="modal" data-bs-target="#modalProducto">
+                            <i class="bi bi-plus"></i> Nuevo Producto
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" id="buscarProducto" placeholder="Buscar productos...">
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-select" id="filtroCategoria">
+                                    <option value="">Todas las categorías</option>
+                                </select>
+                            </div>
+                        </div>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Nombre</th>
+                                    <th>Categoría</th>
+                                    <th>Precio Venta</th>
+                                    <th>Stock</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaProductos">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección Clientes -->
+            <div id="section-clientes" class="section">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-people"></i> Gestión de Clientes</span>
+                        <button class="btn btn-colgate" data-bs-toggle="modal" data-bs-target="#modalCliente">
+                            <i class="bi bi-plus"></i> Nuevo Cliente
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" id="buscarCliente" placeholder="Buscar clientes...">
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-select" id="filtroTipoCliente">
+                                    <option value="">Todos los tipos</option>
+                                    <option value="minorista">Minorista</option>
+                                    <option value="mayorista">Mayorista</option>
+                                    <option value="distribuidor">Distribuidor</option>
+                                    <option value="cadena">Cadena</option>
+                                </select>
+                            </div>
+                        </div>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Razón Social</th>
+                                    <th>RUC</th>
+                                    <th>Tipo</th>
+                                    <th>Distrito</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaClientes">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección Inventario -->
+            <div id="section-inventario" class="section">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-clipboard-data"></i> Control de Inventario</span>
+                        <div>
+                            <button class="btn btn-outline-secondary me-2" onclick="cargarMovimientos()">
+                                <i class="bi bi-arrow-repeat"></i> Movimientos
+                            </button>
+                            <button class="btn btn-colgate" data-bs-toggle="modal" data-bs-target="#modalAjuste">
+                                <i class="bi bi-plus-slash-minus"></i> Ajuste
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <select class="form-select" id="filtroAlmacen">
+                                    <option value="">Todos los almacenes</option>
+                                </select>
+                            </div>
+                        </div>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Almacén</th>
+                                    <th>Stock Actual</th>
+                                    <th>Reservado</th>
+                                    <th>Disponible</th>
+                                    <th>Ubicación</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaInventario">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección Ventas -->
+            <div id="section-ventas" class="section">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-cart3"></i> Gestión de Ventas</span>
+                        <button class="btn btn-colgate" data-bs-toggle="modal" data-bs-target="#modalVenta">
+                            <i class="bi bi-plus"></i> Nueva Venta
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <select class="form-select" id="filtroEstadoVenta">
+                                    <option value="">Todos los estados</option>
+                                    <option value="borrador">Borrador</option>
+                                    <option value="confirmado">Confirmado</option>
+                                    <option value="en_preparacion">En Preparación</option>
+                                    <option value="listo_envio">Listo Envío</option>
+                                    <option value="en_ruta">En Ruta</option>
+                                    <option value="entregado">Entregado</option>
+                                </select>
+                            </div>
+                        </div>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Número</th>
+                                    <th>Fecha</th>
+                                    <th>Cliente</th>
+                                    <th>Total</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaVentas">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección Logística -->
+            <div id="section-logistica" class="section">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="bi bi-speedometer2"></i> Dashboard Logística
+                            </div>
+                            <div class="card-body" id="dashboardLogistica">
+                                <p class="text-muted">Cargando...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-truck"></i> Envíos Pendientes</span>
+                                <button class="btn btn-colgate btn-sm" onclick="cargarEnvios()">
+                                    <i class="bi bi-arrow-repeat"></i> Actualizar
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Código</th>
+                                            <th>Venta</th>
+                                            <th>Fecha Prog.</th>
+                                            <th>Estado</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tablaEnvios">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="bi bi-car-front"></i> Vehículos
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Placa</th>
+                                            <th>Tipo</th>
+                                            <th>Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tablaVehiculos">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="bi bi-person-badge"></i> Conductores
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>DNI</th>
+                                            <th>Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tablaConductores">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modales -->
+    <!-- Modal Producto -->
+    <div class="modal fade" id="modalProducto" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nuevo Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="formProducto">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Código</label>
+                            <input type="text" class="form-control" name="codigo" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Nombre</label>
+                            <input type="text" class="form-control" name="nombre" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Categoría</label>
+                            <select class="form-select" name="categoria_id" id="selectCategoriaProducto">
+                            </select>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Precio Compra</label>
+                                    <input type="number" step="0.01" class="form-control" name="precio_compra" value="0">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Precio Venta</label>
+                                    <input type="number" step="0.01" class="form-control" name="precio_venta" value="0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-colgate">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Cliente -->
+    <div class="modal fade" id="modalCliente" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nuevo Cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="formCliente">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Código</label>
+                            <input type="text" class="form-control" name="codigo" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Razón Social</label>
+                            <input type="text" class="form-control" name="razon_social" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">RUC</label>
+                            <input type="text" class="form-control" name="ruc">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tipo</label>
+                            <select class="form-select" name="tipo">
+                                <option value="minorista">Minorista</option>
+                                <option value="mayorista">Mayorista</option>
+                                <option value="distribuidor">Distribuidor</option>
+                                <option value="cadena">Cadena</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Dirección</label>
+                            <input type="text" class="form-control" name="direccion">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Distrito</label>
+                            <input type="text" class="form-control" name="distrito">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-colgate">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

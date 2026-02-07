@@ -1,0 +1,1 @@
+# Schemas de validación Pydantic

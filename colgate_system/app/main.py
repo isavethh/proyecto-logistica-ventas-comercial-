@@ -4,9 +4,11 @@ Aplicación Principal FastAPI
 """
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 import time
+import os
 
 from app.config import settings
 from app.database import init_db, engine, Base
@@ -90,10 +92,18 @@ app.include_router(inventario.router, prefix="/api")
 app.include_router(ventas.router, prefix="/api")
 app.include_router(logistica.router, prefix="/api")
 
+# Servir archivos estáticos del frontend
+frontend_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend")
+if os.path.exists(frontend_path):
+    app.mount("/static", StaticFiles(directory=frontend_path), name="static")
 
-# Endpoint raíz
+
+# Endpoint raíz - Servir el frontend
 @app.get("/")
 async def root():
+    index_path = os.path.join(frontend_path, "index.html")
+    if os.path.exists(index_path):
+        return FileResponse(index_path)
     return {
         "sistema": settings.APP_NAME,
         "version": settings.APP_VERSION,

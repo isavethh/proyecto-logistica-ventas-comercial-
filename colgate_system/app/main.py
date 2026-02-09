@@ -12,7 +12,7 @@ import os
 
 from app.config import settings
 from app.database import init_db, engine, Base
-from app.routers import auth, productos, clientes, inventario, ventas, logistica
+from app.routers import auth, productos, clientes, inventario, ventas, logistica, reportes
 
 
 @asynccontextmanager

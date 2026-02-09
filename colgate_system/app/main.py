@@ -91,6 +91,7 @@ app.include_router(clientes.router, prefix="/api")
 app.include_router(inventario.router, prefix="/api")
 app.include_router(ventas.router, prefix="/api")
 app.include_router(logistica.router, prefix="/api")
+app.include_router(reportes.router, prefix="/api")
 
 # Servir archivos estáticos del frontend
 frontend_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend")

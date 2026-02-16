@@ -1,7 +1,7 @@
 # Sistema de Gestión Empresarial - Colgate
 
 ## 📋 Descripción
-Sistema completo de gestión empresarial para comercialización de productos de higiene bucal (tipo Colgate). Incluye módulos de ventas, inventario, logística, clientes y más..
+Sistema completo de gestión empresarial para comercialización de productos de higiene bucal (tipo Colgate). Incluye módulos de ventas, inventario, logística, clientes y más...
 
 ## 🚀 Tecnologías Utilizadas
 
